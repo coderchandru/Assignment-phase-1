@@ -1,0 +1,317 @@
+!pip install contractions missingno wordcloud
+
+
+import numpy as np
+import pandas as pd
+import matplotlib.pyplot as plt
+import seaborn as sns
+import missingno as msno
+import warnings
+warnings.filterwarnings(action='ignore')
+
+# Import NLTK and download required resources
+import nltk
+from nltk.corpus import stopwords 
+from nltk.tokenize import word_tokenize, sent_tokenize 
+from nltk.stem import LancasterStemmer, WordNetLemmatizer
+
+nltk.download('stopwords')
+nltk.download('punkt')
+nltk.download('wordnet')
+
+# Import other libraries
+import re
+import string
+import unicodedata
+import contractions
+from sklearn.feature_extraction.text import CountVectorizer, TfidfVectorizer
+import wordcloud
+from wordcloud import STOPWORDS, WordCloud
+import pandas as pd
+from sklearn.model_selection import train_test_split, StratifiedKFold
+from sklearn.svm import LinearSVC
+from sklearn.ensemble import RandomForestClassifier
+from sklearn.model_selection import cross_val_score
+from sklearn.metrics import (
+    recall_score,
+    accuracy_score,
+    confusion_matrix,
+    classification_report,
+    f1_score,
+    precision_score,
+    precision_recall_fscore_support
+)
+
+# Set options for displaying data
+pd.set_option("display.max_columns", None)
+pd.set_option("display.max_rows", 200)
+
+import numpy as np
+import pandas as pd
+import matplotlib.pyplot as plt
+import seaborn as sns
+import missingno as msno
+import warnings
+warnings.filterwarnings(action='ignore')
+
+# Import NLTK and download required resources
+import nltk
+from nltk.corpus import stopwords 
+from nltk.tokenize import word_tokenize, sent_tokenize 
+from nltk.stem import LancasterStemmer, WordNetLemmatizer
+
+nltk.download('stopwords')
+nltk.download('punkt')
+nltk.download('wordnet')
+
+# Import other libraries
+import re
+import string
+import unicodedata
+import contractions
+from sklearn.feature_extraction.text import CountVectorizer, TfidfVectorizer
+import wordcloud
+from wordcloud import STOPWORDS, WordCloud
+import pandas as pd
+from sklearn.model_selection import train_test_split, StratifiedKFold
+from sklearn.svm import LinearSVC
+from sklearn.ensemble import RandomForestClassifier
+from sklearn.model_selection import cross_val_score
+from sklearn.metrics import (
+    recall_score,
+    accuracy_score,
+    confusion_matrix,
+    classification_report,
+    f1_score,
+    precision_score,
+    precision_recall_fscore_support
+)
+
+# Set options for displaying data
+pd.set_option("display.max_columns", None)
+pd.set_option("disimport numpy as np
+import pandas as pd
+import matplotlib.pyplot as plt
+import seaborn as sns
+import missingno as msno
+import warnings
+warnings.filterwarnings(action='ignore')
+
+# Import NLTK and download required resources
+import nltk
+from nltk.corpus import stopwords 
+from nltk.tokenize import word_tokenize, sent_tokenize 
+from nltk.stem import LancasterStemmer, WordNetLemmatizer
+
+nltk.download('stopwords')
+nltk.download('punkt')
+nltk.download('wordnet')
+
+# Import other libraries
+import re
+import string
+import unicodedata
+import contractions
+from sklearn.feature_extraction.text import CountVectorizer, TfidfVectorizer
+import wordcloud
+from wordcloud import STOPWORDS, WordCloud
+import pandas as pd
+from sklearn.model_selection import train_test_split, StratifiedKFold
+from sklearn.svm import LinearSVC
+from sklearn.ensemble import RandomForestClassifier
+from sklearn.model_selection import cross_val_score
+from sklearn.metrics import (
+    recall_score,
+    accuracy_score,
+    confusion_matrix,
+    classification_report,
+    f1_score,
+    precision_score,
+    precision_recall_fscore_support
+)
+
+# Set options for displaying data
+pd.set_option("display.max_columns", None)
+pd.set_option("display.max_rows", 200)
+
+
+
+df.head()
+
+df.info()
+
+
+df.isnull().sum()
+
+
+plt.figure(figsize=(10,7))
+sns.heatmap(df.isnull(), cmap = "Blues")                       
+plt.title("Missing values?", fontsize = 15)
+plt.show()
+
+
+
+plt.figure(figsize=(10,7))
+sns.heatmap(df.isnull(), cmap = "Blues")                       
+plt.title("Missing values?", fontsize = 15)
+plt.show()
+
+
+df.drop(["tweet_coord", "product_sentiment_gold", "negativereason_gold"], axis=1, inplace=True)
+
+
+df.head()
+
+freq = df.groupby("negativereason").size()
+
+
+df.duplicated().sum()
+
+df.drop_duplicates(inplace = True)
+
+df.describe().T
+
+df.nunique()
+
+
+plt.figure(figsize=(7,3))
+sns.countplot(data=df,x='product', palette=['#1f78b4', '#33a02c', '#e31a1c', '#ff7f00', '#6a3d9a', '#a6cee3'])
+plt.show()
+
+
+sentiment_counts = df['product_sentiment'].value_counts()
+plt.figure(figsize=(6, 4))
+plt.pie(sentiment_counts, labels=sentiment_counts.index, autopct='%1.1f%%', startangle=140)
+plt.title('Distribution of product Sentiments')
+plt.axis('equal')  # Equal aspect ratio ensures that pie is drawn as a circle.
+plt.show()
+
+
+sentiment_counts = df['product_sentiment'].value_counts()
+plt.figure(figsize=(6, 4))
+plt.pie(sentiment_counts, labels=sentiment_counts.index, autopct='%1.1f%%', startangle=140)
+plt.title('Distribution of product Sentiments')
+plt.axis('equal')  # Equal aspect ratio ensures that pie is drawn as a circle.
+plt.show()
+
+df = df[['product_sentiment', 'text']].copy()
+
+
+df
+
+
+X = df["text"]
+y = df["product_sentiment"]
+
+
+x
+
+
+y
+
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size = 0.2, random_state = 42)
+
+
+print(X_train.shape, X_test.shape, y_train.shape, y_test.shape)
+
+
+tfidf = TfidfVectorizer(stop_words="english")
+
+tfidf.fit(X_train)
+
+print(tfidf.get_feature_names_out())
+
+print(tfidf.vocabulary_)
+
+
+count_vect = CountVectorizer(stop_words="english")
+neg_matrix = count_vect.fit_transform(df[df["product_sentiment"]=="negative"]["text"])
+freqs = zip(count_vect.get_feature_names_out(), neg_matrix.sum(axis=0).tolist()[0])
+
+print(sorted(freqs, key=lambda x: -x[1])[:100])
+
+
+new_df = df[df["product_sentiment"] == "positive"]
+words = " ".join(new_df["text"])
+cleaned_word = " ".join([word for word in words.split() if "http" not in word and not word.startswith("@") and word != "RT"])
+wordcloud = WordCloud(stopwords = STOPWORDS,
+                     background_color = "black", width = 3000, height = 2500).generate(cleaned_word)
+plt.figure(figsize = (12, 12))
+plt.imshow(wordcloud)
+plt.axis("off")
+plt.show()
+
+
+new_df = df[df["airline_sentiment"] == "negative"]
+words = " ".join(new_df["text"])
+cleaned_word = " ".join([word for word in words.split() if "http" not in word and not word.startswith("@") and word != "RT"])
+wordcloud = WordCloud(stopwords = STOPWORDS,
+                     background_color = "black", width = 3000, height = 2500).generate(cleaned_word)
+plt.figure(figsize = (12, 12))
+plt.imshow(wordcloud)
+plt.axis("off")
+plt.show()
+
+from sklearn.preprocessing import LabelEncoder
+le = LabelEncoder()
+
+le.fit(df["product_sentiment"])
+df["product_sentiment_encoded"] = le.transform(df["product_sentiment"])
+df.head()
+
+
+def tweet_to_words(tweet):
+    letters_only = re.sub("[^a-zA-Z]", " ", tweet)
+    words = letters_only.lower().split()
+    stops = set(stopwords.words("english"))
+    meaningful_words = [w for w in words if not w in stops]
+    return(" ".join( meaningful_words ))
+
+nltk.download("stopwords")
+df["clean_tweet"] = df["text"].apply(lambda x: tweet_to_words(x))
+
+
+df.info()
+
+X = df["clean_tweet"]
+y = df["product_sentiment"]
+
+print(X.shape, y.shape)
+
+
+X_train, X_test, y_train, y_test = train_test_split(X, y, random_state = 42)
+
+
+
+vect = CountVectorizer()
+vect.fit(X_train)
+
+X_train_dtm = vect.transform(X_train)
+X_test_dtm = vect.transform(X_test)
+
+
+vect_tunned = CountVectorizer(stop_words = "english", ngram_range = (1, 2), min_df = 0.1, max_df = 0.7, max_features = 100)
+vect_tunned
+
+
+from sklearn.svm import SVC
+model = SVC(kernel = "linear", random_state = 10)
+model.fit(X_train_dtm, y_train)
+pred = model.predict(X_test_dtm)
+
+print("Accuracy Score: ", accuracy_score(y_test, pred) * 100)
+
+
+print("Accuracy Score: ", accuracy_score(y_test, pred) * 100)
+
+conf_matrix = pd.DataFrame(data=confusion_matrix(y_test, pred), columns=['Predicted:0', 'Predicted:1', 'Predicted:2'], index=['Actual:0', 'Actual:1', 'Actual:2'])
+
+# Plot the 3x3 confusion matrix
+sns.heatmap(conf_matrix, annot=True, fmt='d', cmap='Paired', cbar=False, linewidths=0.1, annot_kws={'size': 25})
+plt.xticks(fontsize=20)
+plt.yticks(fontsize=20)
+plt.show()
+
+print(classification_report(y_test, pred))
+
+
